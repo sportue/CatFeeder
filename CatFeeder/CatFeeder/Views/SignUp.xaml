@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CatFeeder.Views.SignUp"
+             xmlns:trg="clr-namespace:CatFeeder.Triggers"
+             xmlns:vm="clr-namespace:CatFeeder.ViewModels"
+             xmlns:cnv="clr-namespace:CatFeeder.Converters">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <cnv:ColorToBoolConverter x:Key="colorToBoolConverter"></cnv:ColorToBoolConverter>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.BindingContext>
+        <vm:SignUpViewModel></vm:SignUpViewModel>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout BackgroundColor="MidnightBlue">
+            <StackLayout Orientation="Vertical" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                <RelativeLayout VerticalOptions="Start" HorizontalOptions="Center" WidthRequest="200" HeightRequest="200">
+                    <Image Source="{Binding ImgSource}" WidthRequest="200" HeightRequest="200" Aspect="AspectFit" ></Image>
+                </RelativeLayout>
+                <Entry Placeholder="Username" Text="{Binding Username}" VerticalOptions="Center" HorizontalOptions="FillAndExpand" TextColor="AliceBlue" PlaceholderColor="CornflowerBlue"></Entry>
+                <Entry Placeholder="Email example@example.com" Text="{Binding Email}"  VerticalOptions="Center" HorizontalOptions="FillAndExpand" TextColor="AliceBlue" PlaceholderColor="CornflowerBlue"></Entry>
+                <Entry Placeholder="Name" Text="{Binding FirstName}"  VerticalOptions="Center" HorizontalOptions="FillAndExpand" TextColor="AliceBlue" PlaceholderColor="CornflowerBlue"></Entry>
+                <Entry Placeholder="Surname" Text="{Binding LastName}" VerticalOptions="Center" HorizontalOptions="FillAndExpand" TextColor="AliceBlue" PlaceholderColor="CornflowerBlue"></Entry>
+                <Entry Placeholder="Password" x:Name="Password" Text="{Binding Password}" VerticalOptions="Center" HorizontalOptions="FillAndExpand" TextColor="AliceBlue" IsPassword="True" PlaceholderColor="CornflowerBlue"></Entry>
+                <Entry Placeholder="Re-Password" x:Name="RePassword" Text="{Binding PasswordRetry}"  VerticalOptions="Center" HorizontalOptions="FillAndExpand" TextColor="AliceBlue" IsPassword="True" PlaceholderColor="CornflowerBlue">
+                    <Entry.Triggers>
+                        <EventTrigger Event="TextChanged">
+                            <trg:PasswordTrigger FirstPassword="{x:Reference Password}"></trg:PasswordTrigger>
+                        </EventTrigger>
+                    </Entry.Triggers>
+                </Entry>
+                <Button Text="Register" BackgroundColor="CornflowerBlue" Command="{Binding SignUpCommand}"
+                        IsEnabled="{Binding Source={x:Reference RePassword}, Path=TextColor, 
+                    Converter={StaticResource colorToBoolConverter}}"></Button>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,24 @@
+﻿using Xamarin.Forms;
+
+namespace CatFeeder.Triggers
+{
+    public class PasswordTrigger : TriggerAction<Entry>
+    {
+        Entry firstPassword;
+
+        public Entry FirstPassword { get => firstPassword; set => firstPassword = value; }
+
+        protected override void Invoke(Entry sender)
+        {
+            if (sender.Text.Equals(firstPassword.Text))
+            {
+                sender.TextColor = Color.AliceBlue;
+            }
+            else
+            {
+                sender.TextColor = Color.Red;
+            }
+        }
+
+    }
+}

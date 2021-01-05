@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CatFeeder.Views.MainPage"
+             xmlns:trg="clr-namespace:CatFeeder.Triggers"
+             xmlns:vm="clr-namespace:CatFeeder.ViewModels" >
+    <ContentPage.BindingContext>
+        <vm:MainPageViewModel></vm:MainPageViewModel>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout BackgroundColor="MidnightBlue">
+            <StackLayout Orientation="Vertical" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                <Image VerticalOptions="Center" Source="{Binding ImgSource}"  HorizontalOptions="Center" WidthRequest="200" HeightRequest="200" BackgroundColor="CornflowerBlue"></Image>
+                <Button Text="Sign In" BackgroundColor="CornflowerBlue" Command="{Binding SignInCommand}"></Button>
+                <Button Text="Sign Up" BackgroundColor="CornflowerBlue" Command="{Binding SignUpCommand}"></Button>
+                <!--<Button Text="SignOut" IsVisible="{Binding SignInInfo}" BackgroundColor="CornflowerBlue" >
+                    <Button.Triggers>
+                        <EventTrigger Event="TextChanged">
+                            <trg:SignInTrigger SignInChange="{x:Reference SignInInfo}"></trg:SignInTrigger>
+                        </EventTrigger>
+                    </Button.Triggers>
+                </Button>-->
+
+                <Label  x:Name="SignInInfo" TextColor="LightSkyBlue"  Text="{Binding LoginStatus}" FontSize="Medium" FontAttributes="Bold" HorizontalTextAlignment="Center">
+                </Label>
+            </StackLayout>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="CatFeeder.Views.SignIn"            
+             xmlns:vm="clr-namespace:CatFeeder.ViewModels"
+             xmlns:cnv="clr-namespace:CatFeeder.Converters" 
+             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <cnv:ColorToBoolConverter x:Key="colorToBoolConverter"></cnv:ColorToBoolConverter>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.BindingContext>
+        <vm:SignInViewModel></vm:SignInViewModel>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout BackgroundColor="MidnightBlue">
+            <!--Orientation="Vertical" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"-->
+            <StackLayout Orientation="Vertical" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                <!--<RelativeLayout VerticalOptions="Start" HorizontalOptions="Center" WidthRequest="200" HeightRequest="200">
+                    <Image Source="{Binding ImgSource}" WidthRequest="200" HeightRequest="200" Aspect="AspectFit" ></Image>
+                </RelativeLayout>-->
+                <material:MaterialTextField LeadingIcon="https://img.icons8.com/ios-glyphs/30/000000/email.png" InputType="Email" Placeholder="Email"  Text="{Binding Email}" PlaceholderColor="WhiteSmoke" WidthRequest="250" VerticalOptions="Center" HorizontalOptions="Center">
+                </material:MaterialTextField>
+                <material:MaterialTextField LeadingIcon="https://img.icons8.com/material-sharp/24/000000/password.png" Placeholder="Password" Text="{Binding Password}" PlaceholderColor="WhiteSmoke" InputType="Password" WidthRequest="250" VerticalOptions="Center" HorizontalOptions="Center">
+
+                </material:MaterialTextField>
+                <StackLayout  Orientation="Horizontal">
+                    <Button Text="Sign Up"   FontSize="Micro" BackgroundColor="MidnightBlue" Command="{Binding SignUpCommand}" HorizontalOptions="StartAndExpand"  ></Button>
+                    <Button Text="Forgot password?" FontSize="Micro" BackgroundColor="MidnightBlue" Command="{Binding LoginCommand}" HorizontalOptions="EndAndExpand" ></Button>
+                </StackLayout>
+
+                <Button Text="Login" BackgroundColor="CornflowerBlue" Command="{Binding LoginCommand}"></Button>
+                <Button x:Name="LoginFb" Text="Login with Facebook" BackgroundColor="CornflowerBlue" Clicked="LoginFb_Clicked"></Button>
+                <Button x:Name="LoginGoogle" Text="Login with Google" BackgroundColor="CornflowerBlue" Command="{Binding GoogleLoginCommand}"></Button>
+
+
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
