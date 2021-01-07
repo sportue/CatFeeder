@@ -1,44 +1,132 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
-             x:Class="CatFeeder.Views.SignIn"            
-             xmlns:vm="clr-namespace:CatFeeder.ViewModels"
-             xmlns:cnv="clr-namespace:CatFeeder.Converters" 
-             xmlns:material="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <cnv:ColorToBoolConverter x:Key="colorToBoolConverter"></cnv:ColorToBoolConverter>
-        </ResourceDictionary>
-    </ContentPage.Resources>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="CatFeeder.Views.SignIn"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:renderers="clr-namespace:CatFeeder.Renderers"
+     xmlns:vm="clr-namespace:CatFeeder.ViewModels"
+    NavigationPage.HasNavigationBar="False">
     <ContentPage.BindingContext>
         <vm:SignInViewModel></vm:SignInViewModel>
     </ContentPage.BindingContext>
-    <ContentPage.Content>
-        <StackLayout BackgroundColor="MidnightBlue">
-            <!--Orientation="Vertical" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"-->
-            <StackLayout Orientation="Vertical" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-                <!--<RelativeLayout VerticalOptions="Start" HorizontalOptions="Center" WidthRequest="200" HeightRequest="200">
-                    <Image Source="{Binding ImgSource}" WidthRequest="200" HeightRequest="200" Aspect="AspectFit" ></Image>
-                </RelativeLayout>-->
-                <material:MaterialTextField LeadingIcon="https://img.icons8.com/ios-glyphs/30/000000/email.png" InputType="Email" Placeholder="Email"  Text="{Binding Email}" PlaceholderColor="WhiteSmoke" WidthRequest="250" VerticalOptions="Center" HorizontalOptions="Center">
-                </material:MaterialTextField>
-                <material:MaterialTextField LeadingIcon="https://img.icons8.com/material-sharp/24/000000/password.png" Placeholder="Password" Text="{Binding Password}" PlaceholderColor="WhiteSmoke" InputType="Password" WidthRequest="250" VerticalOptions="Center" HorizontalOptions="Center">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="EntryLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="TextColor" Value="White" />
+            </Style>
+            <Style x:Key="EntryStyle" TargetType="renderers:BorderlessEntry">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="TextColor" Value="White" />
+            </Style>
+            <Style x:Key="BoxStyle" TargetType="BoxView">
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="HeightRequest" Value="1" />
+                <Setter Property="HorizontalOptions" Value="Fill" />
+            </Style>
+            <Style x:Key="PancakeStyle" TargetType="renderers:PancakeView">
+                <Setter Property="Padding" Value="10" />
+                <Setter Property="HeightRequest" Value="30" />
+                <Setter Property="WidthRequest" Value="30" />
+                <Setter Property="BorderColor" Value="DarkGray" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
+            <Style x:Key="ButtonStyle" TargetType="Button">
+                <Setter Property="WidthRequest" Value="150" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <AbsoluteLayout>
+        <StackLayout
+            AbsoluteLayout.LayoutBounds="1,1,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            Spacing="10">
+            <renderers:PancakeView
+                x:Name="pancakeView"
+                BackgroundColor="#83071E"
+                CornerRadius="0,0,50,50"
+                HorizontalOptions="FillAndExpand">
+                <StackLayout Margin="30,20,30,50" VerticalOptions="EndAndExpand">
+                    <StackLayout Margin="0,0,0,30">
+                        <Label
+                            FontSize="30"
+                            Style="{StaticResource EntryLabelStyle}"
+                            Text="Login" />
+                        <BoxView
+                            Margin="0,10,0,0"
+                            WidthRequest="32"
+                            HeightRequest="2"
+                            Style="{StaticResource BoxStyle}"
+                            HorizontalOptions="StartAndExpand" />
+                    </StackLayout>
 
-                </material:MaterialTextField>
-                <StackLayout  Orientation="Horizontal">
-                    <Button Text="Sign Up"   FontSize="Micro" BackgroundColor="MidnightBlue" Command="{Binding SignUpCommand}" HorizontalOptions="StartAndExpand"  ></Button>
-                    <Button Text="Forgot password?" FontSize="Micro" BackgroundColor="MidnightBlue" Command="{Binding LoginCommand}" HorizontalOptions="EndAndExpand" ></Button>
+                    <StackLayout Margin="0,20,0,0">
+                        <Label Style="{StaticResource EntryLabelStyle}" Text="Email" />
+                        <renderers:BorderlessEntry Style="{StaticResource EntryStyle}" Placeholder="example@example.com" Text="{Binding Email}"  />
+                        <BoxView Style="{StaticResource BoxStyle}" />
+                    </StackLayout>
+                    <StackLayout Margin="0,20,0,10">
+                        <Label Style="{StaticResource EntryLabelStyle}" Text="Password" />
+                        <renderers:BorderlessEntry
+                            IsPassword="True"
+                            Style="{StaticResource EntryStyle}"
+                            Placeholder="Password"
+                            Text="{Binding Password}" />
+                        <BoxView Style="{StaticResource BoxStyle}" />
+                    </StackLayout>
+                    <Label
+                        FontSize="12"
+                        Text="Forgot Password?"
+                        TextColor="White"
+                        HorizontalOptions="EndAndExpand" />
                 </StackLayout>
+            </renderers:PancakeView>
+            <StackLayout Margin="0,30,0,0">
+                <Label
+                    Style="{StaticResource EntryLabelStyle}"
+                    Text="or login with"
+                    TextColor="Black"
+                    HorizontalOptions="CenterAndExpand" />
+                <StackLayout
+                    Margin="0,20,0,0"
+                    Orientation="Horizontal"
+                    Spacing="20"
+                    HorizontalOptions="CenterAndExpand">
+                    <renderers:PancakeView Style="{StaticResource PancakeStyle}">
+                        <ImageButton Source="gmail" Clicked="LoginGoogle_Clicked"></ImageButton>
+                    </renderers:PancakeView>
 
-                <Button Text="Login" BackgroundColor="CornflowerBlue" Command="{Binding LoginCommand}"></Button>
-                <Button x:Name="LoginFb" Text="Login with Facebook" BackgroundColor="CornflowerBlue" Clicked="LoginFb_Clicked"></Button>
-                <Button x:Name="LoginGoogle" Text="Login with Google" BackgroundColor="CornflowerBlue" Command="{Binding GoogleLoginCommand}"></Button>
-
-
+                    <renderers:PancakeView Style="{StaticResource PancakeStyle} ">
+                        <ImageButton Source="facebook" Clicked="LoginFb_Clicked"></ImageButton>
+                    </renderers:PancakeView>
+                </StackLayout>
             </StackLayout>
         </StackLayout>
-    </ContentPage.Content>
+        <StackLayout
+            x:Name="buttonsStack"
+            Orientation="Horizontal"
+            Spacing="20"
+            HorizontalOptions="CenterAndExpand">
+            <Button
+                BackgroundColor="White"
+                BorderColor="DarkGray"
+                BorderWidth="1"
+                Command="{Binding SignUpCommand}"
+                Style="{StaticResource ButtonStyle}"
+                Text="SIGNUP"
+                TextColor="Black" />
+            <Button
+                BackgroundColor="#1B1B1B"
+                Style="{StaticResource ButtonStyle}"
+                Command="{Binding LoginCommand}"
+                Text="LOGIN"
+                TextColor="White"/>
+        </StackLayout>
+    </AbsoluteLayout>
+
 </ContentPage>

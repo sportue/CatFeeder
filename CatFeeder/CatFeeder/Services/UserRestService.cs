@@ -10,6 +10,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace CatFeeder.Services
 {
@@ -21,11 +22,33 @@ namespace CatFeeder.Services
 
         }
       
+        public async Task<bool> LoginWithToken()
+        {
+            try
+            {
+                var token = await SecureStorage.GetAsync("user_token");
+                if (!String.IsNullOrWhiteSpace(token))
+                {
+                    
+                    User user = await getUserByToken(token);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
 
+                return false;
+            }
+
+        }
         public async Task<User> getUserByMailAndPassword(string email, string password)
         {
             var data = new BaseResponse<SignInResponse>();
-            User user = new User();
+            var user = new User();
             HttpClient client = new HttpClient();
 
             var uri = new Uri(Constants.SignIn);
@@ -46,17 +69,14 @@ namespace CatFeeder.Services
                     data = JsonConvert.DeserializeObject<BaseResponse<SignInResponse>>(result);
 
                     var stream = data.Data.Token;
-                    var handler = new JwtSecurityTokenHandler();
-                    var jsonToken = handler.ReadToken(stream);
-                    var tokenS = handler.ReadToken(stream) as JwtSecurityToken;
-
-                    if (!string.IsNullOrWhiteSpace(tokenS.Claims.First(claim => claim.Type == "userID").Value))
-                    {
-                        user.Id = new Guid(tokenS.Claims.First(claim => claim.Type == "userID").Value);
-                    }
-                    user.FirstName = tokenS.Claims.First(claim => claim.Type == "firstName").Value;
-                    user.LastName = tokenS.Claims.First(claim => claim.Type == "lastName").Value;
-                    user.Username = tokenS.Claims.First(claim => claim.Type == "unique_name").Value;
+                    user = await getUserByToken(stream);
+                   
+                    await SecureStorage.SetAsync("user_token", stream);
+                   
+                    //var token = await SecureStorage.GetAsync("user_token");
+                    //SecureStorage.Remove("user_token");
+                    //Preferences.Set("Token", Constants.CURRENT_USER.Token);
+                    //var token = Preferences.Get("Token", "");
                 }
 
             }
@@ -67,6 +87,25 @@ namespace CatFeeder.Services
             }
 
             return user;
+        }
+
+        public async Task<User> getUserByToken(string stream)
+        {
+            User user = new User();
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(stream);
+            var tokenS = handler.ReadToken(stream) as JwtSecurityToken;
+            if (!string.IsNullOrWhiteSpace(tokenS.Claims.First(claim => claim.Type == "userID").Value))
+            {
+                user.Id = new Guid(tokenS.Claims.First(claim => claim.Type == "userID").Value);
+            }
+            user.FirstName = tokenS.Claims.First(claim => claim.Type == "firstName").Value;
+            user.LastName = tokenS.Claims.First(claim => claim.Type == "lastName").Value;
+            user.Email = tokenS.Claims.First(claim => claim.Type == "email").Value;
+            user.Username = tokenS.Claims.First(claim => claim.Type == "unique_name").Value;
+            user.Token = stream;
+            return user;
+
         }
 
         public async Task<User> getUserByFacebookToken(string tokenAccess)
@@ -92,17 +131,11 @@ namespace CatFeeder.Services
                     data = JsonConvert.DeserializeObject<BaseResponse<SignInResponse>>(result);
 
                     var stream = data.Data.Token;
-                    var handler = new JwtSecurityTokenHandler();
-                    var jsonToken = handler.ReadToken(stream);
-                    var tokenS = handler.ReadToken(stream) as JwtSecurityToken;
+                    user = await getUserByToken(stream);
 
-                    if (!string.IsNullOrWhiteSpace(tokenS.Claims.First(claim => claim.Type == "userID").Value))
-                    {
-                        user.Id = new Guid(tokenS.Claims.First(claim => claim.Type == "userID").Value);
-                    }
-                    user.FirstName = tokenS.Claims.First(claim => claim.Type == "firstName").Value;
-                    user.LastName = tokenS.Claims.First(claim => claim.Type == "lastName").Value;
-                    user.Username = tokenS.Claims.First(claim => claim.Type == "unique_name").Value;
+                    await SecureStorage.SetAsync("user_token", stream);
+
+                  
                 }
 
             }
@@ -133,16 +166,9 @@ namespace CatFeeder.Services
                     data = JsonConvert.DeserializeObject<BaseResponse<SignInResponse>>(result);
 
                     var stream = data.Data.Token;
-                    var handler = new JwtSecurityTokenHandler();
-                    var jsonToken = handler.ReadToken(stream);
-                    var tokenS = handler.ReadToken(stream) as JwtSecurityToken;
-                    if (!string.IsNullOrWhiteSpace(tokenS.Claims.First(claim => claim.Type == "userID").Value))
-                    {
-                        user.Id = new Guid(tokenS.Claims.First(claim => claim.Type == "userID").Value);
-                    }
-                    user.FirstName = tokenS.Claims.First(claim => claim.Type == "firstName").Value;
-                    user.LastName = tokenS.Claims.First(claim => claim.Type == "lastName").Value;
-                    user.Username = tokenS.Claims.First(claim => claim.Type == "unique_name").Value;
+                    user = await getUserByToken(stream);
+
+                    await SecureStorage.SetAsync("user_token", stream);
                 }
 
             }

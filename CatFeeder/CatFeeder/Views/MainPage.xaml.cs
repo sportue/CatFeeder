@@ -12,9 +12,31 @@ namespace CatFeeder.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage
     {
-        public MainPage()
+        bool isLoggerOut;
+        public MainPage(bool isLoggerOut)
         {
             InitializeComponent();
+            this.IsLoggerOut = isLoggerOut;
         }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            if (!isLoggerOut)
+            {
+                Navigation.RemovePage(this);
+            }
+
+        }
+
+        protected void ClickLoginPage(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new SignIn());
+        }
+
+
+        public bool IsLoggerOut { get => isLoggerOut; set => isLoggerOut = value; }
+
+
     }
 }

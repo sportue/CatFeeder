@@ -5,6 +5,8 @@ using Android.OS;
 using Plugin.CurrentActivity;
 using Plugin.GoogleClient;
 using Android.Content;
+using Android.Gms.Auth.Api.SignIn;
+using Android.Gms.Auth.Api;
 
 namespace CatFeeder.Droid
 {
@@ -37,7 +39,11 @@ namespace CatFeeder.Droid
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
             base.OnActivityResult(requestCode, resultCode, data);
-            GoogleClientManager.OnAuthCompleted(requestCode, resultCode, data);
+            if(requestCode == 1)
+            {
+                GoogleSignInResult result = Auth.GoogleSignInApi.GetSignInResultFromIntent(data);
+                GoogleManager.Instance.OnAuthCompleted(result);
+            }
         }
     }
 }

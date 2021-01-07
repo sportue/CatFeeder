@@ -2,10 +2,19 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CatFeeder.Views.Map"
-             xmlns:vm="clr-namespace:CatFeeder.ViewModels">
+             xmlns:vm="clr-namespace:CatFeeder.ViewModels"
+           >
     <ContentPage.BindingContext>
         <vm:MapViewModel></vm:MapViewModel>
     </ContentPage.BindingContext>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Log Out" 
+                     IconImageSource="baseline_power_settings_new_black_24.png"
+                     Clicked="ToolbarItem_Clicked"
+                     Order="Primary"
+                     Priority="0">
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
             <Button Text="Google Map" Command="{Binding GoogleMapCommand}"></Button>

@@ -1,30 +1,107 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CatFeeder.Views.MainPage"
-             xmlns:trg="clr-namespace:CatFeeder.Triggers"
-             xmlns:vm="clr-namespace:CatFeeder.ViewModels" >
-    <ContentPage.BindingContext>
-        <vm:MainPageViewModel></vm:MainPageViewModel>
-    </ContentPage.BindingContext>
-    <ContentPage.Content>
-        <StackLayout BackgroundColor="MidnightBlue">
-            <StackLayout Orientation="Vertical" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-                <Image VerticalOptions="Center" Source="{Binding ImgSource}"  HorizontalOptions="Center" WidthRequest="200" HeightRequest="200" BackgroundColor="CornflowerBlue"></Image>
-                <Button Text="Sign In" BackgroundColor="CornflowerBlue" Command="{Binding SignInCommand}"></Button>
-                <Button Text="Sign Up" BackgroundColor="CornflowerBlue" Command="{Binding SignUpCommand}"></Button>
-                <!--<Button Text="SignOut" IsVisible="{Binding SignInInfo}" BackgroundColor="CornflowerBlue" >
-                    <Button.Triggers>
-                        <EventTrigger Event="TextChanged">
-                            <trg:SignInTrigger SignInChange="{x:Reference SignInInfo}"></trg:SignInTrigger>
-                        </EventTrigger>
-                    </Button.Triggers>
-                </Button>-->
-
-                <Label  x:Name="SignInInfo" TextColor="LightSkyBlue"  Text="{Binding LoginStatus}" FontSize="Medium" FontAttributes="Bold" HorizontalTextAlignment="Center">
-                </Label>
-            </StackLayout>
+<ContentPage
+    x:Class="CatFeeder.Views.MainPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:renderers="clr-namespace:CatFeeder.Renderers"
+    Padding="0"
+    BackgroundColor="#21262F"
+    NavigationPage.HasNavigationBar="False"
+    mc:Ignorable="d">
+    <StackLayout
+        Margin="20"
+        Spacing="20"
+        VerticalOptions="CenterAndExpand">
+        <renderers:PancakeView
+            WidthRequest="100"
+            HeightRequest="100"
+            CornerRadius="20"
+            Elevation="5"
+            HorizontalOptions="CenterAndExpand">
+            <Image
+                WidthRequest="100"
+                HeightRequest="100"
+                Source="logo"
+                HorizontalOptions="CenterAndExpand" />
+        </renderers:PancakeView>
+        <Label
+            FontAttributes="Bold"
+            Text="Uygulama için logo ve açıklama"
+            TextColor="White"
+            HorizontalOptions="CenterAndExpand"
+            VerticalOptions="CenterAndExpand" />
+        <StackLayout>
 
         </StackLayout>
-    </ContentPage.Content>
+        <renderers:PancakeView
+            HeightRequest="50"
+            BackgroundGradientAngle="270"
+            BackgroundGradientEndColor="#6D67D2"
+            BackgroundGradientStartColor="#4E4A96"
+            CornerRadius="10"
+            Elevation="5"
+            VerticalOptions="Start">
+            <renderers:PancakeView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="ClickLoginPage" />
+            </renderers:PancakeView.GestureRecognizers>
+            <Label
+                Text="Login"
+                TextColor="White"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand" />
+        </renderers:PancakeView>
+        <StackLayout>
+
+        </StackLayout>
+        <StackLayout>
+
+        </StackLayout>
+        <StackLayout>
+
+        </StackLayout>
+        <StackLayout>
+
+        </StackLayout>
+        <StackLayout>
+
+        </StackLayout>
+        <StackLayout>
+
+        </StackLayout>
+        <StackLayout>
+
+        </StackLayout>
+        <StackLayout>
+
+        </StackLayout>
+
+
+
+        <StackLayout
+            Margin="10,10,10,0"
+            Orientation="Horizontal"
+            HorizontalOptions="FillAndExpand">
+            <Label
+                FontSize="12"
+                WidthRequest="140"
+                HorizontalTextAlignment="Start"
+                TextColor="White"
+                HorizontalOptions="Start"
+                VerticalOptions="EndAndExpand">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Developed By " />
+                        <Span
+                            FontAttributes="Bold"
+                            FontSize="12"
+                            Text="CatFeeder"
+                            TextColor="#E68333"
+                            TextDecorations="Underline" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </StackLayout>
+    </StackLayout>
 </ContentPage>

@@ -40,6 +40,7 @@ namespace CatFeeder.ViewModels
                 await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new Map()));
             }
         }
+
         public string Username
         {
             get => username; set
