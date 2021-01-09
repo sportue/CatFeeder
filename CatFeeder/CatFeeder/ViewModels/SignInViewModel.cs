@@ -4,8 +4,7 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using CatFeeder.Views;
 using System;
-using Plugin.GoogleClient;
-using Plugin.GoogleClient.Shared;
+
 using Newtonsoft.Json;
 
 namespace CatFeeder.ViewModels
@@ -17,9 +16,10 @@ namespace CatFeeder.ViewModels
         ImageSource imgSource;
         ICommand loginCommand;
         ICommand signUpCommand;
-        public Command GoogleLoginCommand { get; }
+        ICommand forgotPasswordCommand;
 
-        public IGoogleClientManager _googleService = CrossGoogleClient.Current;
+
+
         public SignInViewModel()
         {
 
@@ -27,52 +27,17 @@ namespace CatFeeder.ViewModels
             SignUpCommand = new Command(signUpFunction);
             LoginCommand = new Command(loginFunction);
             //GoogleLoginCommand = new Command(GoogleLogin);
+            ForgotPasswordCommand = new Command(forgotPasswordFunction);
 
         }
 
-        //private void GoogleLogin(object obj)
-        //{
-        //    try
-        //    {
-        //        if (!string.IsNullOrEmpty(_googleService.AccessToken))
-        //        {
-        //            //Always require user authentication
-        //            _googleService.Logout();
-        //        }
 
-        //        EventHandler<GoogleClientResultEventArgs<Models.GoogleUser>> userLoginDelegate = null;
-        //        userLoginDelegate = async (object sender, GoogleClientResultEventArgs<Models.GoogleUser> e) =>
-        //        {
-        //            switch (e.Status)
-        //            {
-        //                case GoogleActionStatus.Completed:
-        //                        var googleUserString = JsonConvert.SerializeObject(e.Data);
-        //                    break;
+        public async void forgotPasswordFunction()
+        {
+            await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new ForgotPassword()));
+        }
 
-        //                    //    var socialLoginData = new NetworkAuthData
-        //                    //{
-        //                    //    Id = e.Data.Id,
-        //                    //    Logo = authNetwork.Icon,
-        //                    //    Foreground = authNetwork.Foreground,
-        //                    //    Background = authNetwork.Background,
-        //                    //    Picture = e.Data.Picture.AbsoluteUri,
-        //                    //    Name = e.Data.Name,
-        //                    //};
 
-                         
-        //            }
-
-        //            _googleService.OnLogin -= userLoginDelegate;
-        //        };
-
-        //        _googleService.OnLogin += userLoginDelegate;
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //    }
-
-        //}
 
         public async void loginFunction() 
         {
@@ -140,5 +105,6 @@ namespace CatFeeder.ViewModels
 
         public ICommand LoginCommand { get => loginCommand; set => loginCommand = value; }
         public ICommand SignUpCommand { get => signUpCommand; set => signUpCommand = value; }
+        public ICommand ForgotPasswordCommand { get => forgotPasswordCommand; set => forgotPasswordCommand = value; }
     }
 }

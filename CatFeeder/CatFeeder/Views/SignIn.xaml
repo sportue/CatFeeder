@@ -83,7 +83,12 @@
                         FontSize="12"
                         Text="Forgot Password?"
                         TextColor="White"
-                        HorizontalOptions="EndAndExpand" />
+                        HorizontalOptions="EndAndExpand"
+                        x:Name="ForgetPasswordLabel">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ForgotPasswordCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
                 </StackLayout>
             </renderers:PancakeView>
             <StackLayout Margin="0,30,0,0">
@@ -98,7 +103,7 @@
                     Spacing="20"
                     HorizontalOptions="CenterAndExpand">
                     <renderers:PancakeView Style="{StaticResource PancakeStyle}">
-                        <ImageButton Source="gmail" Clicked="LoginGoogle_Clicked"></ImageButton>
+                        <ImageButton Source="gmail" Clicked="LoginGoogle_ClickedAsync"></ImageButton>
                     </renderers:PancakeView>
 
                     <renderers:PancakeView Style="{StaticResource PancakeStyle} ">
@@ -127,6 +132,7 @@
                 Text="LOGIN"
                 TextColor="White"/>
         </StackLayout>
+
     </AbsoluteLayout>
 
 </ContentPage>

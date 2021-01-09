@@ -1,17 +1,14 @@
 ﻿using CatFeeder.Models;
 using CatFeeder.Services;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Auth;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Xamarin.Essentials;
+using Newtonsoft.Json;
+using System.Diagnostics;
+using CatFeeder.Helpers;
 
 namespace CatFeeder.Views
 {
@@ -19,29 +16,21 @@ namespace CatFeeder.Views
     public partial class SignIn : ContentPage
     {
 
-        private readonly IGoogleManager _googleManager;
-        GoogleUser GoogleUser = new GoogleUser();
-        public bool IsLogedIn { get; set; }
         public SignIn()
         {
-            _googleManager = DependencyService.Get<IGoogleManager>();
-            
             InitializeComponent();
-           
-
         }
 
 
         private async void LoginFb_Clicked(object sender, EventArgs e)
         {
-           
-
             string clientId = String.Empty;
             string redirectUri = String.Empty;
 
             switch (Device.RuntimePlatform)
             {
                 case Device.iOS:
+                    clientId = Constants.FacebookiOSClientId;
                     redirectUri = Constants.FacebookiOSClientId;
                     break;
                 case Device.Android:
@@ -92,118 +81,86 @@ namespace CatFeeder.Views
             }
         }
 
-        private void LoginGoogle_Clicked(object sender, EventArgs e)
+     
+
+        private async void LoginGoogle_ClickedAsync(object sender, EventArgs e)
         {
-            _googleManager.Login(OnLoginComplete);
+            string clientId = String.Empty;
+            string redirectUri = String.Empty;
+
+            switch (Device.RuntimePlatform)
+            {
+                case Device.iOS:
+                    redirectUri = Constants.FacebookiOSClientId;
+                    break;
+                case Device.Android:
+                    clientId = Constants.GoogleAndroidClientId;
+                    redirectUri = Constants.GoogleAndroidRedirectUrl;
+                    break;
+            }
+            var authenticator = new OAuth2Authenticator(
+                       clientId,
+                       null,
+                       Constants.GoogleScope,
+                       new Uri(Constants.GoogleAuthorizeUrl),
+                       new Uri(redirectUri),
+                       new Uri(Constants.GoogleAccessTokenUrl),
+                       null,
+                       false);
+
+            authenticator.Completed += OnAuthCompleted;
+            authenticator.Error += OnAuthError;
+
+            AuthenticationState.Authenticator = authenticator;
+
+            var presenter = new Xamarin.Auth.Presenters.OAuthLoginPresenter();
+            presenter.Login(authenticator);
+
         }
-        private void OnLoginComplete(GoogleUser googleUser, string message)
+        async void OnAuthCompleted(object sender, AuthenticatorCompletedEventArgs e)
         {
-            if (googleUser != null)
+            var authenticator = sender as OAuth2Authenticator;
+            if (authenticator != null)
             {
-                GoogleUser = googleUser;
-          
-                IsLogedIn = true;
+                authenticator.Completed -= OnAuthCompleted;
+                authenticator.Error -= OnAuthError;
             }
-            else
+
+            User user = null;
+            if (e.IsAuthenticated)
             {
-                DisplayAlert("Message", message, "Ok");
+                // If the user is authenticated, request their basic user data from Google
+                // UserInfoUrl = https://www.googleapis.com/oauth2/v2/userinfo
+                var request = new OAuth2Request("GET", new Uri(Constants.GoogleUserInfoUrl), null, e.Account);
+                var response = await request.GetResponseAsync();
+                if (response != null)
+                {
+                    // Deserialize the data and store it in the account store
+                    // The users email address will be used to identify data in SimpleDB
+                    string userJson = await response.GetResponseTextAsync();
+                    user = JsonConvert.DeserializeObject<User>(userJson);
+                }
+
+                if (user != null)
+                {
+                    App.Current.MainPage = new NavigationPage(new Map());
+
+                }
+
+                //await store.SaveAsync(account = e.Account, AppConstant.Constants.AppName);
+                //await DisplayAlert("Email address", user.Email, "OK");
             }
         }
+        void OnAuthError(object sender, AuthenticatorErrorEventArgs e)
+        {
+            var authenticator = sender as OAuth2Authenticator;
+            if (authenticator != null)
+            {
+                authenticator.Completed -= OnAuthCompleted;
+                authenticator.Error -= OnAuthError;
+            }
 
-        //private async void LoginGoogle_Clicked(object sender, EventArgs e)
-        //{
-
-
-        //    string clientId = null;
-        //    string redirectUri = null;
-
-        //    switch (Device.RuntimePlatform)
-        //    {
-        //        case Device.iOS:
-        //            clientId = Constants.GoogleiOSClientId;
-        //            redirectUri = Constants.GoogleiOSRedirectUrl;
-        //            break;
-
-        //        case Device.Android:
-        //            clientId = Constants.GoogleAndroidClientId;
-        //            redirectUri = Constants.GoogleAndroidRedirectUrl;
-        //            break;
-        //    }
-
-
-        //    // account = store.FindAccountsForService(Constants.AppName).FirstOrDefault();
-
-        //    var authenticator = new OAuth2Authenticator(
-        //        clientId,
-        //        null,
-        //        Constants.GoogleScope,
-        //        new Uri(Constants.GoogleAuthorizeUrl),
-        //        new Uri(redirectUri),
-        //        new Uri(Constants.GoogleAccessTokenUrl),
-        //        null,
-        //        true);
-
-
-
-        //    authenticator.Completed += GoogleOnAuthCompleted;
-        //    authenticator.Error += GoogleOnAuthError;
-
-        //    AuthenticationState.Authenticator = authenticator;
-
-        //    var presenter = new Xamarin.Auth.Presenters.OAuthLoginPresenter();
-        //    presenter.Login(authenticator);
-
-        //}
-        //async void GoogleOnAuthCompleted(object sender, AuthenticatorCompletedEventArgs e)
-        //{
-        //    var authenticator = sender as OAuth2Authenticator;
-        //    if (authenticator != null)
-        //    {
-        //        authenticator.Completed -= GoogleOnAuthCompleted;
-        //        authenticator.Error -= GoogleOnAuthError;
-        //    }
-
-        //    User user = null;
-        //    if (e.IsAuthenticated)
-        //    {
-        //        // If the user is authenticated, request their basic user data from Google
-        //        // UserInfoUrl = https://www.googleapis.com/oauth2/v2/userinfo
-        //        var request = new OAuth2Request("GET", new Uri(Constants.GoogleUserInfoUrl), null, e.Account);
-        //        var response = await request.GetResponseAsync();
-        //        if (response != null)
-        //        {
-        //            // Deserialize the data and store it in the account store
-        //            // The users email address will be used to identify data in SimpleDB
-        //            string userJson = await response.GetResponseTextAsync();
-        //            user = JsonConvert.DeserializeObject<User>(userJson);
-        //        }
-
-        //        if (user != null)
-        //        {
-        //            App.Current.MainPage = new NavigationPage(new Map());
-
-        //        }
-
-        //        await DisplayAlert("Email address", user.Email, "OK");
-        //    }
-        //}
-
-        //void GoogleOnAuthError(object sender, AuthenticatorErrorEventArgs e)
-        //{
-        //    var authenticator = sender as OAuth2Authenticator;
-        //    if (authenticator != null)
-        //    {
-        //        authenticator.Completed -= GoogleOnAuthCompleted;
-        //        authenticator.Error -= GoogleOnAuthError;
-        //    }
-        //    Debug.WriteLine("Authentication error: " + e.Message);
-        //    Preferences.Set("Token", Constants.CURRENT_USER.Token);
-        //    //var token = Preferences.Get("Token", "");
-        //}
-
-
-
-
-
+            Debug.WriteLine("Authentication error: " + e.Message);
+        }
     }
 }

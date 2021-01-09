@@ -115,7 +115,7 @@ namespace CatFeeder.Services
             HttpClient client = new HttpClient();
 
             var uri = new Uri(Constants.SignInWithFacebook);
-            var request = new FacebookRequest();
+            FacebookRequest request = new FacebookRequest();
             request.FacebookToken = tokenAccess;
             var json = JsonConvert.SerializeObject(request);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -150,7 +150,7 @@ namespace CatFeeder.Services
 
         public async Task<User> addUser(SignUpRequest request)
         {
-            var data = new BaseResponse<SignInResponse>();
+            
             User user = new User();
             HttpClient client = new HttpClient();
             var uri = new Uri(Constants.SignUp);
@@ -162,6 +162,7 @@ namespace CatFeeder.Services
                 HttpStatusCode code = response.StatusCode;
                 if (code == HttpStatusCode.OK)
                 {
+                    var data = new BaseResponse<SignInResponse>();
                     var result = await response.Content.ReadAsStringAsync();
                     data = JsonConvert.DeserializeObject<BaseResponse<SignInResponse>>(result);
 
@@ -179,6 +180,41 @@ namespace CatFeeder.Services
 
             return user;
 
+        }
+
+        public async Task<BaseResponse<bool>> ForgotPassword(string email, string username)
+        {
+            var data = new BaseResponse<bool>();
+
+            HttpClient client = new HttpClient();
+
+            var uri = new Uri(Constants.ForgotPassword);
+            var request = new ForgetPasswordRequest();
+            request.Email = email;
+            request.Username = username;
+            var json = JsonConvert.SerializeObject(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            try
+            {
+                HttpResponseMessage response = await client.PostAsync(uri, content);
+                HttpStatusCode code = response.StatusCode;
+                if (code == HttpStatusCode.OK)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    data = JsonConvert.DeserializeObject<BaseResponse<bool>>(result);
+                
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return data; 
         }
     }
 }

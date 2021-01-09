@@ -1,6 +1,6 @@
 ﻿using Xamarin.Auth;
 
-namespace CatFeeder.Models
+namespace CatFeeder.Helpers
 {
     public class AuthenticationState
     {

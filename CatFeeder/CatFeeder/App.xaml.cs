@@ -11,9 +11,9 @@ namespace CatFeeder
         public App()
         {
             InitializeComponent();
-            XF.Material.Forms.Material.Init(this);
             UserService = new UserRestService();
             MainPage = new NavigationPage(new SplashScreen());
+           
         }
 
         protected override void OnStart()

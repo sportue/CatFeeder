@@ -3,10 +3,7 @@ using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
 using Plugin.CurrentActivity;
-using Plugin.GoogleClient;
-using Android.Content;
-using Android.Gms.Auth.Api.SignIn;
-using Android.Gms.Auth.Api;
+using CatFeeder.Services;
 
 namespace CatFeeder.Droid
 {
@@ -21,11 +18,11 @@ namespace CatFeeder.Droid
             base.OnCreate(savedInstanceState);
             global::Xamarin.Auth.Presenters.XamarinAndroid.AuthenticationConfiguration.Init(this, savedInstanceState); // for facebook login
             CrossCurrentActivity.Current.Init(this, savedInstanceState);
-            GoogleClientManager.Initialize(this);
+            
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Xamarin.FormsMaps.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            XF.Material.Droid.Material.Init(this, savedInstanceState);
+           // XF.Material.Droid.Material.Init(this, savedInstanceState);
             Xamarin.FormsGoogleMaps.Init(this, savedInstanceState); // initialize for Xamarin.Forms.GoogleMaps
             LoadApplication(new App());
         }
@@ -35,15 +32,20 @@ namespace CatFeeder.Droid
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-
-        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        protected override void OnResume()
         {
-            base.OnActivityResult(requestCode, resultCode, data);
-            if(requestCode == 1)
-            {
-                GoogleSignInResult result = Auth.GoogleSignInApi.GetSignInResultFromIntent(data);
-                GoogleManager.Instance.OnAuthCompleted(result);
-            }
+            base.OnResume();
+
+            Xamarin.Essentials.Platform.OnResume();
         }
+
+    }
+
+    [Activity(NoHistory = true, LaunchMode = LaunchMode.SingleTop)]
+    [IntentFilter(new[] { Android.Content.Intent.ActionView },
+   Categories = new[] { Android.Content.Intent.CategoryDefault, Android.Content.Intent.CategoryBrowsable },
+   DataScheme = Constants.CALLBACK_SCHEME)]
+    public class WebAuthenticationCallbackActivity : Xamarin.Essentials.WebAuthenticatorCallbackActivity
+    {
     }
 }
