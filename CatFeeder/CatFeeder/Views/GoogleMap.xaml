@@ -3,15 +3,34 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:renderers="clr-namespace:CatFeeder.Renderers"
              xmlns:maps="clr-namespace:Xamarin.Forms.GoogleMaps;assembly=Xamarin.Forms.GoogleMaps"
              mc:Ignorable="d"
+             
              x:Class="CatFeeder.Views.GoogleMap">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+   
+            <Style x:Key="ButtonStyle" TargetType="Button">
+                <Setter Property="WidthRequest" Value="150" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <Grid>
-        <maps:Map x:Name="map"/>
+        <maps:Map PinDragStart="map_PinDragStart" PinDragEnd="map_PinDragEnd" HasZoomEnabled="True" x:Name="map"/>
         <StackLayout Orientation="Vertical" VerticalOptions="EndAndExpand">
-            <Button Text="Load Bowl Near By" Clicked="Button_Clicked" 
-                VerticalOptions="EndAndExpand" 
-                WidthRequest="40" HeightRequest="40" Margin="20"/>
+            <Button Text="Track Path" x:Name="TrackPath" 
+                    BackgroundColor="Black" TextColor="White" Style="{StaticResource ButtonStyle}" 
+                    Clicked="TrackPath_Clicked" />
+            <Button
+                BackgroundColor="#E68333"
+                Style="{StaticResource ButtonStyle}"
+                Clicked="Button_Clicked"
+                Text="Load Bowl Near By"
+                TextColor="White"/>
         </StackLayout>
         
     </Grid> 

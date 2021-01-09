@@ -6,6 +6,7 @@
     xmlns:renderers="clr-namespace:CatFeeder.Renderers"
      xmlns:vm="clr-namespace:CatFeeder.ViewModels"
     NavigationPage.HasNavigationBar="False">
+    
     <ContentPage.BindingContext>
         <vm:SignInViewModel></vm:SignInViewModel>
     </ContentPage.BindingContext>
