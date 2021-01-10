@@ -1,4 +1,5 @@
-﻿using CatFeeder.Models;
+﻿using CatFeeder.Helpers;
+using CatFeeder.Models;
 using CatFeeder.Models.Request.LoginRequest;
 using CatFeeder.Services;
 using CatFeeder.Views;
@@ -25,20 +26,68 @@ namespace CatFeeder.ViewModels
         }
         public async void signUpFunction()
         {
-            SignUpRequest req = new SignUpRequest();
-            req.Password = Password;
-            req.PasswordRetry = PasswordRetry;
-            req.Email = Email;
-            req.FirstName = FirstName;
-            req.LastName = LastName;
-            req.Username = Username;
-            User user = await App.UserService.addUser(req);
-            if (user != null)
+             string validationText = string.Empty;
+            bool validation = true;
+            if (!Email.IsValidEmailAddress())
             {
-                await App.Current.MainPage.DisplayAlert("Message", "Sign Up is successful," + " Welcome " + user.Username + " !", "Ok");
-                Constants.CURRENT_USER = user;
-                await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new Map()));
+                validationText += "Email is not valid";
+                validation = false;
             }
+            if ( string.IsNullOrEmpty(Password) || (Password != PasswordRetry) || Password.Length < 6)
+            {
+                if (validation)
+                {
+                    if (string.IsNullOrEmpty(Password) || Password.Length < 6)
+                    {
+                        validationText += "Password must be at least six characters";
+                    }
+                    else
+                    {
+                        validationText += "Password do not match";
+                        validation = false;
+                    }
+                }
+                else
+                {
+                    if ( string.IsNullOrEmpty(Password) || Password.Length < 6 )
+                    {
+                        validationText += "\n" + "Password must be at least six characters";
+                    }
+                    else
+                    {
+                        validationText += "\n" + "Password do not match";
+                        validation = false;
+                    }
+                }
+               
+            }
+            if (!validation)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", validationText, "Ok");
+            }
+            else
+            {
+                SignUpRequest req = new SignUpRequest();
+                req.Password = Password;
+                req.PasswordRetry = PasswordRetry;
+                req.Email = Email;
+                req.FirstName = FirstName;
+                req.LastName = LastName;
+                req.Username = Username;
+                var data = await App.UserService.addUser(req);
+               
+                if (!data.HasError)
+                {
+                    await App.Current.MainPage.DisplayAlert("Message", "Sign Up is successful," + " Welcome " + Constants.CURRENT_USER.Username + " !", "Ok");
+                    await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new Map()));
+                }
+                else
+                {
+                    await App.Current.MainPage.DisplayAlert("Message", "Sign Up is successful," + data.Message +"!", "Ok");
+                }
+            }
+
+          
         }
 
         public string Username

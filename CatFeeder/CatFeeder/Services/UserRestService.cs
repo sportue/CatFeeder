@@ -72,13 +72,7 @@ namespace CatFeeder.Services
                     user = await getUserByToken(stream);
                    
                     await SecureStorage.SetAsync("user_token", stream);
-                   
-                    //var token = await SecureStorage.GetAsync("user_token");
-                    //SecureStorage.Remove("user_token");
-                    //Preferences.Set("Token", Constants.CURRENT_USER.Token);
-                    //var token = Preferences.Get("Token", "");
                 }
-
             }
             catch (Exception)
             {
@@ -104,6 +98,7 @@ namespace CatFeeder.Services
             user.Email = tokenS.Claims.First(claim => claim.Type == "email").Value;
             user.Username = tokenS.Claims.First(claim => claim.Type == "unique_name").Value;
             user.Token = stream;
+            Constants.CURRENT_USER = user;
             return user;
 
         }
@@ -148,10 +143,10 @@ namespace CatFeeder.Services
             return user;
         }
 
-        public async Task<User> addUser(SignUpRequest request)
+        public async Task<BaseResponse<SignInResponse>> addUser(SignUpRequest request)
         {
-            
-            User user = new User();
+
+            var data = new BaseResponse<SignInResponse>();
             HttpClient client = new HttpClient();
             var uri = new Uri(Constants.SignUp);
             var json = JsonConvert.SerializeObject(request);
@@ -162,23 +157,21 @@ namespace CatFeeder.Services
                 HttpStatusCode code = response.StatusCode;
                 if (code == HttpStatusCode.OK)
                 {
-                    var data = new BaseResponse<SignInResponse>();
                     var result = await response.Content.ReadAsStringAsync();
                     data = JsonConvert.DeserializeObject<BaseResponse<SignInResponse>>(result);
-
                     var stream = data.Data.Token;
-                    user = await getUserByToken(stream);
-
+                    await getUserByToken(stream);
                     await SecureStorage.SetAsync("user_token", stream);
                 }
-
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                data.HasError = true;
+                data.Message = ex.Message;
+                return data;
             }
 
-            return user;
+            return data;
 
         }
 

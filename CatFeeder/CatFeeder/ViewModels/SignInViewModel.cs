@@ -23,27 +23,20 @@ namespace CatFeeder.ViewModels
 
         public SignInViewModel()
         {
-
             ImgSource = ImageSource.FromResource("CatFeeder.Images.xamarin.png");
             SignUpCommand = new Command(signUpFunction);
             LoginCommand = new Command(loginFunction);
-            //GoogleLoginCommand = new Command(GoogleLogin);
             ForgotPasswordCommand = new Command(forgotPasswordFunction);
-
         }
 
 
         public async void forgotPasswordFunction()
         {
-            
             await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new ForgotPassword()));
         }
 
-
-
         public async void loginFunction() 
         {
-           
             User user = await App.UserService.getUserByMailAndPassword(Email, Password);
             if (user == null)
             {
@@ -54,7 +47,6 @@ namespace CatFeeder.ViewModels
                 LoginStatus = "Oturum Açma Başarılı";
                 Constants.CURRENT_USER = user;
                 await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new Map()));
-
             }
         }
 

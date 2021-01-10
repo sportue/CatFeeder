@@ -19,6 +19,9 @@ namespace CatFeeder.Views
         {
             InitializeComponent();
             BindingContext = googleMapViewModel = new GoogleMapViewModel();
+            var location =  Geolocation.GetLastKnownLocationAsync();
+            map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(location.Result.Latitude, location.Result.Longitude),
+                                             Distance.FromMeters(1000)));
         }
 
         async void Button_Clicked(object sender, System.EventArgs e)
@@ -39,14 +42,11 @@ namespace CatFeeder.Views
                 map.Pins.Add(BowlPin);
                
                  map.PinClicked += (sender2, args) => {
-                     //selectedPinName = ((Map)sender2).Label;
+                     selectedPinName = args.Pin.Label;
                      selectedPosition = args.Pin.Position;
-                    //  Uri uri = new Uri("http://maps.google.com/maps?daddr=" + "40.99502" + "," + "29.06440");/
-                    // Device.OpenUri(uri);
-                    CrossExternalMaps.Current.NavigateTo("Target", selectedPosition.Latitude, selectedPosition.Longitude);
+                    CrossExternalMaps.Current.NavigateTo(selectedPinName, selectedPosition.Latitude, selectedPosition.Longitude);
                 };
             }
-
 
             try
             {
@@ -64,23 +64,20 @@ namespace CatFeeder.Views
                     Type = PinType.Place,
                     Label = "Current",
                     Position = new Position(location.Latitude, location.Longitude),
-                    //Position = new Position(40.99441, 29.03968),
-                   Icon = (Device.RuntimePlatform == Device.Android) ? BitmapDescriptorFactory.FromBundle("imgbin_feed-garfield.png") :
+                    Icon = (Device.RuntimePlatform == Device.Android) ? BitmapDescriptorFactory.FromBundle("imgbin_feed-garfield.png") :
                                                              BitmapDescriptorFactory.FromView(new Image()
                                                              { Source = "imgbin_feed-garfield.png", WidthRequest = 50, HeightRequest = 50 }),
                 };
 
                 map.Pins.Add(CurrentLocationPin);
 
-
                 var target = new Position(Convert.ToDouble(content.Latitude), Convert.ToDouble(content.Longitude));
                 var diameter = CalculateDistance(target, CurrentLocationPin.Position);
 
-                map.MoveToRegion(MapSpan.FromCenterAndRadius(CurrentLocationPin.Position, Distance.FromMeters(10000)));
+                map.MoveToRegion(MapSpan.FromCenterAndRadius(CurrentLocationPin.Position, Distance.FromMeters(1000)));
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -93,8 +90,6 @@ namespace CatFeeder.Views
 
         void map_PinDragStart(System.Object sender, Xamarin.Forms.GoogleMaps.PinDragEventArgs e)
         {
-
-
         }
 
         // burası araştıralacak
@@ -103,9 +98,5 @@ namespace CatFeeder.Views
             var retval = (int)Math.Sqrt(Math.Pow(target.Longitude - currentLocation.Longitude, 2) + Math.Pow(target.Latitude - currentLocation.Latitude, 2));
             return retval;
         }
-
-
-     
-
     }
 }

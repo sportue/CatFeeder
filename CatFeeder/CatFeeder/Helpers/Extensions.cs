@@ -3,9 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace CatFeeder.Helpers
 {
-    public  class Extensions
+    public static  class Extensions
     {
-        public  bool IsValidEmailAddress(string s)
+        public static bool IsValidEmailAddress(this string s)
         {
             try
             {
