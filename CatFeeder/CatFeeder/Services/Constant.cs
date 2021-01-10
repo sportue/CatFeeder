@@ -33,7 +33,7 @@ namespace CatFeeder.Services
         #endregion
 
         #region GoogleMap
-        public const string GoogleMapsApiKey = "AIzaSyBCgSgspHLMDGIWwTJ84elKbLGqX0wujSg";
+        public const string GoogleMapsApiKey = "API KEY";
                                               
 
 
