@@ -3,6 +3,7 @@ using CatFeeder.Services;
 using System.Windows.Input;
 using Xamarin.Forms;
 using CatFeeder.Views;
+using CatFeeder.Helpers;
 using System;
 
 using Newtonsoft.Json;
@@ -34,6 +35,7 @@ namespace CatFeeder.ViewModels
 
         public async void forgotPasswordFunction()
         {
+            
             await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new ForgotPassword()));
         }
 
@@ -41,6 +43,7 @@ namespace CatFeeder.ViewModels
 
         public async void loginFunction() 
         {
+           
             User user = await App.UserService.getUserByMailAndPassword(Email, Password);
             if (user == null)
             {

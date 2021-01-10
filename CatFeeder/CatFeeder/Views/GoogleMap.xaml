@@ -22,9 +22,6 @@
     <Grid>
         <maps:Map PinDragStart="map_PinDragStart" PinDragEnd="map_PinDragEnd" HasZoomEnabled="True" x:Name="map"/>
         <StackLayout Orientation="Vertical" VerticalOptions="EndAndExpand">
-            <Button Text="Track Path" x:Name="TrackPath" 
-                    BackgroundColor="Black" TextColor="White" Style="{StaticResource ButtonStyle}" 
-                    Clicked="TrackPath_Clicked" />
             <Button
                 BackgroundColor="#E68333"
                 Style="{StaticResource ButtonStyle}"

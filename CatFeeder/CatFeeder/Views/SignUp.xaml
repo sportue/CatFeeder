@@ -4,11 +4,13 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:renderers="clr-namespace:CatFeeder.Renderers"
-     xmlns:vm="clr-namespace:CatFeeder.ViewModels"
+    xmlns:vm="clr-namespace:CatFeeder.ViewModels"
+    xmlns:behaviors="clr-namespace:CatFeeder.Helpers"
     NavigationPage.HasNavigationBar="False">
     <ContentPage.BindingContext>
         <vm:SignUpViewModel></vm:SignUpViewModel>
     </ContentPage.BindingContext>
+    
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="EntryLabelStyle" TargetType="Label">
@@ -73,7 +75,11 @@
 
                     <StackLayout Margin="0,0,0,0">
                         <Label Style="{StaticResource EntryLabelStyle}" Text="Email" />
-                        <renderers:BorderlessEntry x:Name="Email" Style="{StaticResource EntryStyle}" Placeholder="example@example.com" Text="{Binding Email}"  />
+                        <renderers:BorderlessEntry x:Name="Email" Keyboard="Email" Style="{StaticResource EntryStyle}" Placeholder="example@example.com" Text="{Binding Email}">
+                            <renderers:BorderlessEntry.Behaviors>
+                                <behaviors:EmailValidationBehavior/>
+                            </renderers:BorderlessEntry.Behaviors>
+                        </renderers:BorderlessEntry>
                         <BoxView Style="{StaticResource BoxStyle}" />
                     </StackLayout>
                     <StackLayout Margin="0,0,0,0">
@@ -93,8 +99,11 @@
                             Style="{StaticResource EntryStyle}"
                             Placeholder="Password"
                             Text="{Binding Password}"
-                            x:Name="Password"
-                             />
+                            x:Name="Password">
+                            <renderers:BorderlessEntry.Behaviors>
+                                <behaviors:MinLenghtValidationBehavior/>
+                            </renderers:BorderlessEntry.Behaviors>
+                        </renderers:BorderlessEntry>
                         <BoxView Style="{StaticResource BoxStyle}" />
                     </StackLayout>
                     <StackLayout Margin="0,0,0,10">
@@ -104,8 +113,11 @@
                             Style="{StaticResource EntryStyle}"
                             Placeholder="Password"
                             Text="{Binding PasswordRetry}"
-                            x:Name="RePassword"
-                            />
+                            x:Name="RePassword">
+                            <renderers:BorderlessEntry.Behaviors>
+                                <behaviors:ConfirmPasswordBehavior x:Name="confirmPasswordBehavior" CompareToEntry="{Binding Source={x:Reference Password}}" />
+                            </renderers:BorderlessEntry.Behaviors>
+                        </renderers:BorderlessEntry>
                         <BoxView Style="{StaticResource BoxStyle}" />
                     </StackLayout>
                     <Button

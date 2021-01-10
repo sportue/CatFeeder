@@ -24,7 +24,8 @@ namespace CatFeeder.ViewModels
         internal async Task<BowlLocation> LoadBowl()
         {
             // Burası API den gelecek
-            var bowlLocation =  new BowlLocation { Latitude = 40.99502, Longitude = 29.06440 };
+            var bowlLocation =  new BowlLocation { Latitude = 37.4239983333333, Longitude = -122.085 };
+
 
             return bowlLocation;
         }

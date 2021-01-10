@@ -1,4 +1,5 @@
 ﻿using CatFeeder.ViewModels;
+using Plugin.ExternalMaps;
 using System;
 using System.Linq;
 using Xamarin.Essentials;
@@ -12,6 +13,8 @@ namespace CatFeeder.Views
     public partial class GoogleMap : ContentPage
     {
         GoogleMapViewModel googleMapViewModel;
+        private string selectedPinName;
+        private Position selectedPosition;
         public GoogleMap()
         {
             InitializeComponent();
@@ -29,13 +32,21 @@ namespace CatFeeder.Views
                 {
                     Label = "Bowl",
                     Type = PinType.Place,
-                    Icon = (Device.RuntimePlatform == Device.Android) ? BitmapDescriptorFactory.FromBundle("imgbin_feed-garfield.png") : 
-                                                             BitmapDescriptorFactory.FromView(new Image() 
-                                                           { Source = "imgbin_feed-garfield.png", WidthRequest = 50, HeightRequest = 50 }),
+                 
                     Position = new Position(content.Latitude, content.Longitude)
                 };
+         
                 map.Pins.Add(BowlPin);
+               
+                 map.PinClicked += (sender2, args) => {
+                     //selectedPinName = ((Map)sender2).Label;
+                     selectedPosition = args.Pin.Position;
+                    //  Uri uri = new Uri("http://maps.google.com/maps?daddr=" + "40.99502" + "," + "29.06440");/
+                    // Device.OpenUri(uri);
+                    CrossExternalMaps.Current.NavigateTo("Target", selectedPosition.Latitude, selectedPosition.Longitude);
+                };
             }
+
 
             try
             {
@@ -52,8 +63,11 @@ namespace CatFeeder.Views
                 {
                     Type = PinType.Place,
                     Label = "Current",
-                    // Position = new Position(location.Latitude, location.Longitude)
-                    Position = new Position(40.99441, 29.03968)
+                    Position = new Position(location.Latitude, location.Longitude),
+                    //Position = new Position(40.99441, 29.03968),
+                   Icon = (Device.RuntimePlatform == Device.Android) ? BitmapDescriptorFactory.FromBundle("imgbin_feed-garfield.png") :
+                                                             BitmapDescriptorFactory.FromView(new Image()
+                                                             { Source = "imgbin_feed-garfield.png", WidthRequest = 50, HeightRequest = 50 }),
                 };
 
                 map.Pins.Add(CurrentLocationPin);
@@ -90,74 +104,8 @@ namespace CatFeeder.Views
             return retval;
         }
 
-        async void TrackPath_Clicked(System.Object sender, System.EventArgs e)
-        {
 
-            var pathcontent = await googleMapViewModel.LoadRoute();
+     
 
-            map.Polylines.Clear();
-
-            var polyline = new Xamarin.Forms.GoogleMaps.Polyline();
-            polyline.StrokeColor = Color.Black;
-            polyline.StrokeWidth = 3;
-
-            foreach (var p in pathcontent)
-            {
-                polyline.Positions.Add(p);
-
-            }
-            map.Polylines.Add(polyline);
-
-            map.MoveToRegion(MapSpan.FromCenterAndRadius(new Xamarin.Forms.GoogleMaps.Position(polyline.Positions[0].Latitude, polyline.Positions[0].Longitude), Xamarin.Forms.GoogleMaps.Distance.FromMiles(0.50f)));
-
-            var pin = new Xamarin.Forms.GoogleMaps.Pin
-            {
-                Type = PinType.SearchResult,
-                Position = new Xamarin.Forms.GoogleMaps.Position(polyline.Positions.First().Latitude, polyline.Positions.First().Longitude),
-                Label = "Pin",
-                Address = "Pin",
-                Tag = "CirclePoint",
-                Icon = (Device.RuntimePlatform == Device.Android) ? BitmapDescriptorFactory.FromBundle("imgbin_feed-garfield.png") : BitmapDescriptorFactory.FromView(new Image() { Source = "imgbin_feed-garfield.png", WidthRequest = 25, HeightRequest = 25 })
-
-            };
-            map.Pins.Add(pin);
-
-            var positionIndex = 1;
-
-            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
-            {
-                if (pathcontent.Count > positionIndex)
-                {
-                    UpdatePostions(pathcontent[positionIndex]);
-                    positionIndex++;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            });
-        }
-
-        async void UpdatePostions(Xamarin.Forms.GoogleMaps.Position position)
-        {
-            if (map.Pins.Count == 1 && map.Polylines != null && map.Polylines?.Count > 1)
-                return;
-
-            var cPin = map.Pins.FirstOrDefault();
-
-            if (cPin != null)
-            {
-                cPin.Position = new Xamarin.Forms.GoogleMaps.Position(position.Latitude, position.Longitude);
-                cPin.Icon = (Device.RuntimePlatform == Device.Android) ? BitmapDescriptorFactory.FromBundle("CarPins.png") : BitmapDescriptorFactory.FromView(new Image() { Source = "CarPins.png", WidthRequest = 25, HeightRequest = 25 });
-                map.MoveToRegion(MapSpan.FromCenterAndRadius(cPin.Position, Distance.FromMeters(200)));
-                var previousPosition = map.Polylines?.FirstOrDefault()?.Positions?.FirstOrDefault();
-                map.Polylines?.FirstOrDefault()?.Positions?.Remove(previousPosition.Value);
-            }
-            else
-            {
-                map.Polylines?.FirstOrDefault()?.Positions?.Clear();
-            }
-        }
     }
 }
