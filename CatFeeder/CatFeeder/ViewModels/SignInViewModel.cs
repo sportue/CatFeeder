@@ -7,6 +7,8 @@ using CatFeeder.Helpers;
 using System;
 
 using Newtonsoft.Json;
+using CatFeeder.Models.Response.LoginResponse;
+using CatFeeder.Models.Response;
 
 namespace CatFeeder.ViewModels
 {
@@ -37,16 +39,41 @@ namespace CatFeeder.ViewModels
 
         public async void loginFunction() 
         {
-            User user = await App.UserService.getUserByMailAndPassword(Email, Password);
-            if (user == null)
+            string validationText = string.Empty;
+            bool validation = true;
+            if (string.IsNullOrWhiteSpace(Email) || !Email.IsValidEmailAddress())
             {
-                LoginStatus = "Oturum Açma Başarısız";
+                validationText += "Email is not valid";
+                validation = false;
+            }
+            if (string.IsNullOrWhiteSpace(Password) || Password.Length < 6)
+            {
+                if (validation)
+                {
+                  validationText += "Password must be at least six characters";
+                }
+                else
+                {
+                   validationText += "\n" + "Password must be at least six characters";
+                }
+                validation = false;
+            }
+            if (!validation)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", validationText, "Ok");
             }
             else
             {
-                LoginStatus = "Oturum Açma Başarılı";
-                Constants.CURRENT_USER = user;
-                await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new Map()));
+                BaseResponse<SignInResponse> data = await App.UserService.getUserByMailAndPassword(Email, Password);
+                if (!data.HasError)
+                {
+                    await App.Current.MainPage.DisplayAlert("Message", "Welcome " + Constants.CURRENT_USER.Username + " !", "Ok");
+                    await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new Map()));
+                }
+                else
+                {
+                    await App.Current.MainPage.DisplayAlert("Message", data.Message + "!", "Ok");
+                }
             }
         }
 

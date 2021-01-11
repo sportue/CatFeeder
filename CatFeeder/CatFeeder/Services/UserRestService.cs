@@ -45,10 +45,10 @@ namespace CatFeeder.Services
             }
 
         }
-        public async Task<User> getUserByMailAndPassword(string email, string password)
+        public async Task<BaseResponse<SignInResponse>> getUserByMailAndPassword(string email, string password)
         {
             var data = new BaseResponse<SignInResponse>();
-            var user = new User();
+            
             HttpClient client = new HttpClient();
 
             var uri = new Uri(Constants.SignIn);
@@ -65,22 +65,23 @@ namespace CatFeeder.Services
                 if (code == HttpStatusCode.OK)
                 {
                     var result = await response.Content.ReadAsStringAsync();
-
                     data = JsonConvert.DeserializeObject<BaseResponse<SignInResponse>>(result);
-
                     var stream = data.Data.Token;
-                    user = await getUserByToken(stream);
-                   
-                    await SecureStorage.SetAsync("user_token", stream);
+                    if (data.HasError || string.IsNullOrWhiteSpace(stream))
+                    {
+                        return data;
+                    }
+                    await getUserByToken(stream);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                data.HasError = true;
+                data.Message = ex.Message;
+                return data;
             }
 
-            return user;
+            return data;
         }
 
         public async Task<User> getUserByToken(string stream)
@@ -99,14 +100,15 @@ namespace CatFeeder.Services
             user.Username = tokenS.Claims.First(claim => claim.Type == "unique_name").Value;
             user.Token = stream;
             Constants.CURRENT_USER = user;
+            await SecureStorage.SetAsync("user_token", user.Token);
             return user;
 
         }
 
-        public async Task<User> getUserByFacebookToken(string tokenAccess)
+        public async Task<BaseResponse<SignInResponse>> getUserByFacebookToken(string tokenAccess)
         {
             var data = new BaseResponse<SignInResponse>();
-            User user = new User();
+            
             HttpClient client = new HttpClient();
 
             var uri = new Uri(Constants.SignInWithFacebook);
@@ -122,25 +124,23 @@ namespace CatFeeder.Services
                 if (code == HttpStatusCode.OK)
                 {
                     var result = await response.Content.ReadAsStringAsync();
-
                     data = JsonConvert.DeserializeObject<BaseResponse<SignInResponse>>(result);
-
                     var stream = data.Data.Token;
-                    user = await getUserByToken(stream);
-
-                    await SecureStorage.SetAsync("user_token", stream);
-
-                  
+                    if (data.HasError || string.IsNullOrWhiteSpace(stream))
+                    {
+                        return data;
+                    }
+                    await getUserByToken(stream);
                 }
-
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                data.HasError = true;
+                data.Message = ex.Message;
+                return data;
             }
 
-            return user;
+            return data;
         }
 
         public async Task<BaseResponse<SignInResponse>> addUser(SignUpRequest request)
@@ -160,8 +160,11 @@ namespace CatFeeder.Services
                     var result = await response.Content.ReadAsStringAsync();
                     data = JsonConvert.DeserializeObject<BaseResponse<SignInResponse>>(result);
                     var stream = data.Data.Token;
+                    if (data.HasError || string.IsNullOrWhiteSpace(stream))
+                    {
+                        return data;
+                    }
                     await getUserByToken(stream);
-                    await SecureStorage.SetAsync("user_token", stream);
                 }
             }
             catch (Exception ex)
@@ -195,9 +198,7 @@ namespace CatFeeder.Services
                 if (code == HttpStatusCode.OK)
                 {
                     var result = await response.Content.ReadAsStringAsync();
-
                     data = JsonConvert.DeserializeObject<BaseResponse<bool>>(result);
-                
                 }
 
             }

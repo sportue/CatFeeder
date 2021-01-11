@@ -1,6 +1,7 @@
 ﻿using System.Windows.Input;
 using Xamarin.Forms;
 using CatFeeder.Views;
+using CatFeeder.Helpers;
 
 namespace CatFeeder.ViewModels
 {
@@ -17,17 +18,42 @@ namespace CatFeeder.ViewModels
 
         public async void sendPasswordRetryFunction()
         {
-           var data = await App.UserService.ForgotPassword(Email, Username);
+            string validationText = string.Empty;
+            bool validation = true;
 
-            await App.Current.MainPage.DisplayAlert("Message", data.Message, "Ok");
-
-            if (!data.HasError)
+            if (string.IsNullOrWhiteSpace(Email) || !Email.IsValidEmailAddress())
             {
-                await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new SignIn()));
+                validationText += "Email is not valid";
+                validation = false;
             }
 
-        }
+            if (string.IsNullOrWhiteSpace(Username) || Username.Length < 3)
+            {
+                if (validation)
+                {
+                    validationText += "Username must be at least three characters";
+                }
+                else
+                {
+                    validationText += "\n" + "Username must be at least three characters";
+                }
+                validation = false;
+            }
 
+            if (!validation)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", validationText, "Ok");
+            }
+            else
+            {
+                var data = await App.UserService.ForgotPassword(Email, Username);
+                await App.Current.MainPage.DisplayAlert("Message", data.Message, "Ok");
+                if (!data.HasError)
+                {
+                    await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new SignIn()));
+                }
+            }
+        }
 
         
         public string Email { get => email; set => email = value; }

@@ -9,6 +9,8 @@ using Xamarin.Essentials;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using CatFeeder.Helpers;
+using CatFeeder.Models.Response;
+using CatFeeder.Models.Response.LoginResponse;
 
 namespace CatFeeder.Views
 {
@@ -66,18 +68,16 @@ namespace CatFeeder.Views
 
         public async Task LoginWithFacebookFunctionAsync(string tokenAccess)
         {
-            User user = await App.UserService.getUserByFacebookToken(tokenAccess);
-            if (user == null)
+            BaseResponse<SignInResponse> data = await App.UserService.getUserByFacebookToken(tokenAccess);
+
+            if (!data.HasError)
             {
-                Constants.loginStatus = "Oturum Açma Başarısız";
+                await App.Current.MainPage.DisplayAlert("Message", " Welcome " + Constants.CURRENT_USER.FirstName+ " " + Constants.CURRENT_USER.LastName + " !", "Ok");
+                await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new Map()));
             }
             else
             {
-                Constants.loginStatus = "Oturum Açma Başarılı";
-                Constants.CURRENT_USER = user;
-
-                await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new Map()));
-
+                await App.Current.MainPage.DisplayAlert("Message", data.Message + "!", "Ok");
             }
         }
 

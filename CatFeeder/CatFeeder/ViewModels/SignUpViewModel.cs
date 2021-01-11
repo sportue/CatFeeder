@@ -26,14 +26,26 @@ namespace CatFeeder.ViewModels
         }
         public async void signUpFunction()
         {
-             string validationText = string.Empty;
+            string validationText = string.Empty;
             bool validation = true;
-            if (!Email.IsValidEmailAddress())
+            if (string.IsNullOrWhiteSpace(Email) || !Email.IsValidEmailAddress())
             {
                 validationText += "Email is not valid";
                 validation = false;
             }
-            if ( string.IsNullOrEmpty(Password) || (Password != PasswordRetry) || Password.Length < 6)
+            if (string.IsNullOrWhiteSpace(Username) || Username.Length <3)
+            {
+                if (validation)
+                {
+                   validationText += "Username must be at least three characters";
+                }
+                else
+                {
+                   validationText += "\n" + "Username must be at least three characters";
+                }
+                validation = false;
+            }
+            if (string.IsNullOrWhiteSpace(Password) || (Password != PasswordRetry) || Password.Length < 6)
             {
                 if (validation)
                 {
@@ -44,7 +56,6 @@ namespace CatFeeder.ViewModels
                     else
                     {
                         validationText += "Password do not match";
-                        validation = false;
                     }
                 }
                 else
@@ -56,10 +67,9 @@ namespace CatFeeder.ViewModels
                     else
                     {
                         validationText += "\n" + "Password do not match";
-                        validation = false;
                     }
                 }
-               
+                validation = false;
             }
             if (!validation)
             {
@@ -83,7 +93,7 @@ namespace CatFeeder.ViewModels
                 }
                 else
                 {
-                    await App.Current.MainPage.DisplayAlert("Message", "Sign Up is successful," + data.Message +"!", "Ok");
+                    await App.Current.MainPage.DisplayAlert("Message", data.Message +"!", "Ok");
                 }
             }
 
