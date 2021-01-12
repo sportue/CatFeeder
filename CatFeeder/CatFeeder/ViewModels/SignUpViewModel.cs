@@ -24,6 +24,7 @@ namespace CatFeeder.ViewModels
             ImgSource = ImageSource.FromResource("CatFeeder.Images.emptyuser.png");
             SignUpCommand = new Command(signUpFunction);
         }
+
         public async void signUpFunction()
         {
             string validationText = string.Empty;
@@ -89,7 +90,7 @@ namespace CatFeeder.ViewModels
                 if (!data.HasError)
                 {
                     await App.Current.MainPage.DisplayAlert("Message", "Sign Up is successful," + " Welcome " + Constants.CURRENT_USER.Username + " !", "Ok");
-                    await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new Map()));
+                    await App.Current.MainPage.Navigation.PushAsync(new Map());
                 }
                 else
                 {

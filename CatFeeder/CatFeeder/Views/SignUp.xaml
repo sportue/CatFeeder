@@ -68,21 +68,35 @@
                                 HorizontalOptions="StartAndExpand" />
                         </StackLayout>
                     
-                        <StackLayout Margin="0,0,0,0">
-                            <Label Style="{StaticResource EntryLabelStyle}" Text="Username" />
-                            <renderers:BorderlessEntry Style="{StaticResource EntryStyle}" Placeholder="example" Text="{Binding Username}" x:Name="entryUsername" TextChanged="BorderlessEntry_TextChanged" />
-                            <BoxView Style="{StaticResource BoxStyle}" />
-                        </StackLayout>
+                        <Grid Margin="0,0,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Style="{StaticResource EntryLabelStyle}" Text="Username" Grid.Row="0" />
+                            <renderers:BorderlessEntry Grid.Row="1" Style="{StaticResource EntryStyle}" Placeholder="example" Text="{Binding Username}" x:Name="entryUsername" TextChanged="BorderlessEntryUsername_TextChanged" />
+                            <Label Grid.Row="2" Text="Username must be at least three characters" TextColor="Red" x:Name="labelUsernameError" HeightRequest="0"/>
+                            <BoxView Grid.Row="3" Style="{StaticResource BoxStyle}" />
+                        </Grid>
 
-                        <StackLayout Margin="0,0,0,0">
-                            <Label Style="{StaticResource EntryLabelStyle}" Text="Email" />
-                            <renderers:BorderlessEntry x:Name="Email" Keyboard="Email" Style="{StaticResource EntryStyle}" Placeholder="example@example.com" Text="{Binding Email}">
+                        <Grid Margin="0,0,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Style="{StaticResource EntryLabelStyle}" Text="Email" />
+                            <renderers:BorderlessEntry Grid.Row="1" x:Name="Email" Keyboard="Email" Style="{StaticResource EntryStyle}" TextChanged="BorderlessEntryMail_TextChanged" Placeholder="example@example.com" Text="{Binding Email}">
                                 <renderers:BorderlessEntry.Behaviors>
                                     <behaviors:EmailValidationBehavior/>
                                 </renderers:BorderlessEntry.Behaviors>
                             </renderers:BorderlessEntry>
-                            <BoxView Style="{StaticResource BoxStyle}" />
-                        </StackLayout>
+                            <Label Grid.Row="2" Text="Email is not valid" TextColor="Red" x:Name="labelEmailError" HeightRequest="0"/>
+                            <BoxView Grid.Row="3" Style="{StaticResource BoxStyle}" />
+                        </Grid>
                         <StackLayout Margin="0,0,0,0">
                             <Label Style="{StaticResource EntryLabelStyle}" Text="First Name" />
                             <renderers:BorderlessEntry Style="{StaticResource EntryStyle}" Placeholder="Johnny" Text="{Binding FirstName}"  />
@@ -93,44 +107,62 @@
                             <renderers:BorderlessEntry Style="{StaticResource EntryStyle}" Placeholder="Cash" Text="{Binding LastName}"  />
                             <BoxView Style="{StaticResource BoxStyle}" />
                         </StackLayout>
-                        <StackLayout Margin="0,0,0,10">
-                            <Label Style="{StaticResource EntryLabelStyle}" Text="Password" />
+                        <Grid Margin="0,0,0,10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Style="{StaticResource EntryLabelStyle}" Text="Password" Grid.Row="0" />
                             <renderers:BorderlessEntry
+                                Grid.Row="1"
                                 IsPassword="True"
                                 Style="{StaticResource EntryStyle}"
                                 Placeholder="Password"
+                                TextChanged="BorderlessEntryPassword_TextChanged"
                                 Text="{Binding Password}"
                                 x:Name="Password">
                                 <renderers:BorderlessEntry.Behaviors>
                                     <behaviors:MinLenghtValidationBehavior/>
                                 </renderers:BorderlessEntry.Behaviors>
                             </renderers:BorderlessEntry>
-                            <BoxView Style="{StaticResource BoxStyle}" />
-                        </StackLayout>
-                        <StackLayout Margin="0,0,0,10">
-                            <Label Style="{StaticResource EntryLabelStyle}" Text="Retry-Password" />
+                            <Label Grid.Row="2" Text="Password must be at least six characters" TextColor="Red" x:Name="labelPasswordError" HeightRequest="0"/>
+                            <BoxView Grid.Row="3" Style="{StaticResource BoxStyle}" />
+                        </Grid>
+                        <Grid Margin="0,0,0,10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Style="{StaticResource EntryLabelStyle}" Text="Retry-Password" />
                             <renderers:BorderlessEntry
                                 IsPassword="True"
+                                Grid.Row="1"
                                 Style="{StaticResource EntryStyle}"
                                 Placeholder="Password"
+                                TextChanged="BorderlessEntryRePassword_TextChanged"
                                 Text="{Binding PasswordRetry}"
                                 x:Name="RePassword">
                                 <renderers:BorderlessEntry.Behaviors>
                                     <behaviors:ConfirmPasswordBehavior x:Name="confirmPasswordBehavior" CompareToEntry="{Binding Source={x:Reference Password}}" />
                                 </renderers:BorderlessEntry.Behaviors>
                             </renderers:BorderlessEntry>
-                            <BoxView Style="{StaticResource BoxStyle}" />
-                        </StackLayout>
+                            <Label Grid.Row="2" Text="Password do not match" TextColor="Red" x:Name="labelRePasswordError" HeightRequest="0"/>
+                            <BoxView Grid.Row="3" Style="{StaticResource BoxStyle}" />
+                        </Grid>
                         <Button
-                    BackgroundColor="White"
-                    BorderColor="DarkGray"
-                    BorderWidth="1"
+                            BackgroundColor="White"
+                            BorderColor="DarkGray"
+                            BorderWidth="1"
                             x:Name="buttonRegister"
                             IsEnabled="False"
-                    Command="{Binding SignUpCommand}"
-                    Style="{StaticResource ButtonStyle}"
-                    Text="REGISTER"
-                    TextColor="Black"  >
+                            Command="{Binding SignUpCommand}"
+                            Style="{StaticResource ButtonStyle}"
+                            Text="REGISTER"
+                            TextColor="Black">
                         </Button>
                     </StackLayout>
                 </renderers:PancakeView>
