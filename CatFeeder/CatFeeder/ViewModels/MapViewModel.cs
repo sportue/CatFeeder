@@ -14,7 +14,7 @@ namespace CatFeeder.ViewModels
 
         public async void googleMapFunction()
         {
-            await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new GoogleMap()));
+            await App.Current.MainPage.Navigation.PushAsync(new GoogleMap());
         }
 
         public ICommand GoogleMapCommand { get => googleMapCommand; set => googleMapCommand = value; }

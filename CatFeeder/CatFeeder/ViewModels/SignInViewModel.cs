@@ -21,8 +21,6 @@ namespace CatFeeder.ViewModels
         ICommand signUpCommand;
         ICommand forgotPasswordCommand;
 
-
-
         public SignInViewModel()
         {
             ImgSource = ImageSource.FromResource("CatFeeder.Images.xamarin.png");
@@ -30,7 +28,6 @@ namespace CatFeeder.ViewModels
             LoginCommand = new Command(loginFunction);
             ForgotPasswordCommand = new Command(forgotPasswordFunction);
         }
-
 
         public async void forgotPasswordFunction()
         {
@@ -68,7 +65,7 @@ namespace CatFeeder.ViewModels
                 if (!data.HasError)
                 {
                     await App.Current.MainPage.DisplayAlert("Message", "Welcome " + Constants.CURRENT_USER.Username + " !", "Ok");
-                    await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new Map()));
+                    await App.Current.MainPage.Navigation.PushAsync(new Map());
                 }
                 else
                 {
@@ -79,7 +76,11 @@ namespace CatFeeder.ViewModels
 
         public async void signUpFunction()
         {
-            await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new SignUp()));
+            await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new SignUp())
+            {
+                BarBackgroundColor = Color.Yellow,
+                BarTextColor = Color.Blue
+            });
         }
 
         public string Email

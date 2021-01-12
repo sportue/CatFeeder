@@ -68,6 +68,7 @@
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DependencyServices\GoogleManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -125,15 +126,24 @@
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1821" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
+    <PackageReference Include="Xamarin.Google.iOS.Core">
+      <Version>3.1.0.4</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Google.iOS.SignIn">
+      <Version>5.0.2.1</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\CatFeeder\CatFeeder.csproj">
-      <Project>{E0ED0F79-3EEC-429D-B1CE-6B3670F3BDDD}</Project>
+      <Project>{9A63F9C5-4D1C-4D4B-B396-52EA5778DB45}</Project>
       <Name>CatFeeder</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\imgbin_feed-garfield.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DependencyServices\" />
   </ItemGroup>
 </Project>
