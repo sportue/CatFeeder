@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using CatFeeder.DependencyServices;
+using CatFeeder.iOS.DependencyServices;
 using Foundation;
 using UIKit;
+using Xamarin.Forms;
 
 namespace CatFeeder.iOS
 {
@@ -24,7 +26,7 @@ namespace CatFeeder.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
-
+            DependencyService.Register<IGoogleManager, GoogleManager>();
             return base.FinishedLaunching(app, options);
         }
     }

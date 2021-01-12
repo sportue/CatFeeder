@@ -11,16 +11,26 @@ using System.Diagnostics;
 using CatFeeder.Helpers;
 using CatFeeder.Models.Response;
 using CatFeeder.Models.Response.LoginResponse;
+using CatFeeder.DependencyServices;
+using CatFeeder.Models.Google;
 
 namespace CatFeeder.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SignIn : ContentPage
     {
+        private readonly IGoogleManager _googleManager;
+        public Command GoogleLoginCommand { get; set; }
+        public Command GoogleLogoutCommand { get; set; }
+        private GoogleUser googleUser;
 
         public SignIn()
         {
             InitializeComponent();
+#if DEBUG
+            Email.Text = "cihanoguz92@gmail.com";
+            entryPassword.Text = "123456";
+#endif
         }
 
 
@@ -51,8 +61,6 @@ namespace CatFeeder.Views
             var Presenter = new Xamarin.Auth.Presenters.OAuthLoginPresenter();
             Presenter.Login(Authenticator);
             Authenticator.Completed += Authenticator_Completed;
-
-
         }
 
         private async void Authenticator_Completed(object sender, AuthenticatorCompletedEventArgs e)
@@ -73,15 +81,13 @@ namespace CatFeeder.Views
             if (!data.HasError)
             {
                 await App.Current.MainPage.DisplayAlert("Message", " Welcome " + Constants.CURRENT_USER.FirstName+ " " + Constants.CURRENT_USER.LastName + " !", "Ok");
-                await App.Current.MainPage.Navigation.PushAsync(new NavigationPage(new Map()));
+                await App.Current.MainPage.Navigation.PushAsync(new Map());
             }
             else
             {
                 await App.Current.MainPage.DisplayAlert("Message", data.Message + "!", "Ok");
             }
         }
-
-     
 
         private async void LoginGoogle_ClickedAsync(object sender, EventArgs e)
         {
@@ -117,6 +123,7 @@ namespace CatFeeder.Views
             presenter.Login(authenticator);
 
         }
+
         async void OnAuthCompleted(object sender, AuthenticatorCompletedEventArgs e)
         {
             var authenticator = sender as OAuth2Authenticator;
@@ -151,6 +158,7 @@ namespace CatFeeder.Views
                 //await DisplayAlert("Email address", user.Email, "OK");
             }
         }
+
         void OnAuthError(object sender, AuthenticatorErrorEventArgs e)
         {
             var authenticator = sender as OAuth2Authenticator;
@@ -162,5 +170,58 @@ namespace CatFeeder.Views
 
             Debug.WriteLine("Authentication error: " + e.Message);
         }
+
+        #region Google Login
+        private void GoogleLogin()
+        {
+            _googleManager.Login(OnLoginComplete);
+        }
+
+        private void OnLoginComplete(GoogleUser googleUser, string message)
+        {
+            if (googleUser != null)
+            {
+                this.googleUser = googleUser;
+            }
+            else
+            {
+                DisplayAlert("Hata", message, "Tamam");
+            }
+        }
+
+        void ButtonGoogle_Clicked(object sender, System.EventArgs e)
+        {
+            DependencyService.Get<IGoogleManager>().Login(OnGoogleLoginComplete);
+        }
+
+        private async void OnGoogleLoginComplete(GoogleUser googleUser, string message)
+        {
+            if (googleUser != null)
+            {
+                var takenModel = googleUser;
+                switch (Device.RuntimePlatform)
+                {
+                    case Device.Android:
+                        {
+                            MessagingCenter.Subscribe<string>(this, "googleAndroidAccessToken", async (obj) =>
+                            {
+                                takenModel.AccessToken = obj;
+                                // TODO: service calling
+                            });
+                            break;
+                        }
+                    case Device.iOS:
+                        {
+                            var takenAccessToken = takenModel.AccessToken;
+                            // TODO: service calling
+                            break;
+                        }
+                    default:
+
+                        break;
+                }
+            }
+        }
+        #endregion
     }
 }

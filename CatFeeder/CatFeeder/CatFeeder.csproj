@@ -51,4 +51,7 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DependencyServices\" />
+  </ItemGroup>
 </Project>

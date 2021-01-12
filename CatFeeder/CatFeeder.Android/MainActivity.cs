@@ -4,6 +4,12 @@ using Android.Runtime;
 using Android.OS;
 using Plugin.CurrentActivity;
 using CatFeeder.Services;
+using Android.Content;
+using Android.Gms.Auth.Api.SignIn;
+using Android.Gms.Auth.Api;
+using CatFeeder.Droid.DependencyServices;
+using CatFeeder.DependencyServices;
+using Xamarin.Forms;
 
 namespace CatFeeder.Droid
 {
@@ -22,21 +28,34 @@ namespace CatFeeder.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Xamarin.FormsMaps.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-           // XF.Material.Droid.Material.Init(this, savedInstanceState);
+            DependencyService.Register<IGoogleManager, GoogleManager>();
+            // XF.Material.Droid.Material.Init(this, savedInstanceState);
             Xamarin.FormsGoogleMaps.Init(this, savedInstanceState); // initialize for Xamarin.Forms.GoogleMaps
             LoadApplication(new App());
         }
+
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+
         protected override void OnResume()
         {
             base.OnResume();
 
             Xamarin.Essentials.Platform.OnResume();
+        }
+
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+            if (requestCode == 1)
+            {
+                GoogleSignInResult result = Auth.GoogleSignInApi.GetSignInResultFromIntent(data);
+                GoogleManager.Instance.OnAuthCompleted(result);
+            }
         }
 
     }

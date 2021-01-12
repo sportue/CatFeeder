@@ -6,6 +6,7 @@ namespace CatFeeder
 {
     public partial class App : Application
     {
+
         private static UserRestService userService;
         public static UserRestService UserService { get => userService; set => userService = value; }
         public App()

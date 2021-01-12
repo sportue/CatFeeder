@@ -11,6 +11,9 @@ namespace CatFeeder.Views
             InitializeComponent();
         }
 
-      
+        void ValidateForm()
+        {
+
+        }
     }
 }
