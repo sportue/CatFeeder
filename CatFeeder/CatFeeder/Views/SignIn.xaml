@@ -71,13 +71,15 @@
 
                 <StackLayout Margin="0,20,0,0">
                     <Label Style="{StaticResource EntryLabelStyle}" Text="Email" />
-                    <renderers:BorderlessEntry Style="{StaticResource EntryStyle}" x:Name="Email" Keyboard="Email" Placeholder="example@example.com" Text="{Binding Email}">
+                    <renderers:BorderlessEntry Style="{StaticResource EntryStyle}" x:Name="Email" Keyboard="Email" 
+                                               Placeholder="example@example.com" Text="{Binding Email}"
+                                               TextChanged="BorderlessEntryMail_TextChanged">
                         <renderers:BorderlessEntry.Behaviors>
                             <behaviors:EmailValidationBehavior/>
                         </renderers:BorderlessEntry.Behaviors>
                     </renderers:BorderlessEntry>
                     <BoxView Style="{StaticResource BoxStyle}" />
-                    <Label x:Name="LabelEmailError" TextColor="Black" />
+                    <Label Text="Email is not valid" TextColor="Red" x:Name="labelEmailError" HeightRequest="0"/>
                 </StackLayout>
                 <StackLayout Margin="0,20,0,10">
                     <Label Style="{StaticResource EntryLabelStyle}" Text="Password" />
@@ -86,14 +88,15 @@
                         IsPassword="True"
                         Style="{StaticResource EntryStyle}"
                         Placeholder="Password"
-                        Text="{Binding Password}">
+                        Text="{Binding Password}"
+                        TextChanged="BorderlessEntryPassword_TextChanged">
                         <renderers:BorderlessEntry.Behaviors>
                             <behaviors:MinLenghtValidationBehavior/>
                         </renderers:BorderlessEntry.Behaviors>
                    
                         </renderers:BorderlessEntry>
                         <BoxView Style="{StaticResource BoxStyle}" />
-                    
+                    <Label Grid.Row="2" Text="Password must be at least six characters" TextColor="Red" x:Name="labelPasswordError" HeightRequest="0"/>
                 </StackLayout>
                 <Label
                     FontSize="12"
@@ -123,11 +126,13 @@
                     Text="SIGNUP"
                     TextColor="Black" />
                 <Button
-                    BackgroundColor="#1B1B1B"
+                    BackgroundColor="White"
+                    BorderColor="DarkGray"
                     Style="{StaticResource ButtonStyle}"
                     Command="{Binding LoginCommand}"
                     Text="LOGIN"
-                    TextColor="White"/>
+                    x:Name="buttonLogin"
+                    TextColor="Black" />
                 </StackLayout>
                 <Label
                     Style="{StaticResource EntryLabelStyle}"

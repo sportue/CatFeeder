@@ -32,7 +32,6 @@
             VerticalOptions="Start">
                 <StackLayout>
                     <Button
-                BackgroundColor="#4E4A96"
                 HeightRequest="50"
                 CornerRadius="10"
                 VerticalOptions="Start"

@@ -441,9 +441,7 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxxhdpi\baseline_power_settings_new_black_48.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DependencyServices\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <GoogleServicesJson Include="google-services.json" />
   </ItemGroup>
