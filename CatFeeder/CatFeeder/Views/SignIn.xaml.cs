@@ -26,14 +26,9 @@ namespace CatFeeder.Views
 
         public SignIn()
         {
+            _googleManager = DependencyService.Get<IGoogleManager>();
             InitializeComponent();
-         // buttonLogin.IsEnabled = false;
-//#if DEBUG
-//            Email.Text = "cihanoguz92@gmail.com";
-//            entryPassword.Text = "123456";
-//#endif
         }
-
 
         private async void LoginFb_Clicked(object sender, EventArgs e)
         {
@@ -111,6 +106,7 @@ namespace CatFeeder.Views
         void ButtonGoogle_Clicked(object sender, System.EventArgs e)
         {
             DependencyService.Get<IGoogleManager>().Login(OnGoogleLoginComplete);
+            //_googleManager.Login(OnGoogleLoginComplete);
         }
 
         private async void OnGoogleLoginComplete(GoogleUser googleUser, string message)
@@ -122,7 +118,7 @@ namespace CatFeeder.Views
                 {
                     case Device.Android:
                         {
-                            MessagingCenter.Subscribe<string>(this, "googleAndroidAccessToken", async (obj) =>
+                            MessagingCenter.Subscribe<string>(this, "googleAndroidAccessToken", (obj) =>
                             {
                                 takenModel.AccessToken = obj;
                                 // TODO: service calling

@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "217481810703",
-    "project_id": "catfeeder-301115",
-    "storage_bucket": "catfeeder-301115.appspot.com"
+    "project_number": "604996640955",
+    "project_id": "catfeeder-7b64d",
+    "storage_bucket": "catfeeder-7b64d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:217481810703:android:5ffd7b259307e635f7247a",
+        "mobilesdk_app_id": "1:604996640955:android:11d8c44b8b80043528c99e",
         "android_client_info": {
           "package_name": "com.companyname.catfeeder"
         }
       },
       "oauth_client": [
         {
-          "client_id": "217481810703-0lcdu01g68n96f6jdc89hq33r8e7l3r6.apps.googleusercontent.com",
+          "client_id": "604996640955-8hirpvjf2o59flbernq34f5ilv6c2j3k.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.companyname.catfeeder",
@@ -22,36 +22,20 @@
           }
         },
         {
-          "client_id": "217481810703-2m3n3grkn9umi5kjib21gq5hck3vmaf7.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.companyname.catfeeder",
-            "certificate_hash": "fee6c44983549201e5056feaa1591f0ef5420d2d"
-          }
-        },
-        {
-          "client_id": "217481810703-rr1dr1o7cutnb80ct8f80v8grn4b71l6.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.companyname.catfeeder",
-            "certificate_hash": "5041c8a4b886ddf6e7217eac5b6bb90d27989dd0"
-          }
-        },
-        {
-          "client_id": "217481810703-05qgt5f3ikqqp1t6ojh5d3bsni6fhva7.apps.googleusercontent.com",
+          "client_id": "604996640955-ssgs0nilnoltik13elkhmbpfeervv14m.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBCgSgspHLMDGIWwTJ84elKbLGqX0wujSg"
+          "current_key": "AIzaSyA4jYmZ1_xJtjIC9yr1UasGtOI2poEo1AQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "217481810703-05qgt5f3ikqqp1t6ojh5d3bsni6fhva7.apps.googleusercontent.com",
+              "client_id": "604996640955-ssgs0nilnoltik13elkhmbpfeervv14m.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

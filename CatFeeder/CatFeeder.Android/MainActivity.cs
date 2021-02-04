@@ -29,7 +29,6 @@ namespace CatFeeder.Droid
             Xamarin.FormsMaps.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             DependencyService.Register<IGoogleManager, GoogleManager>();
-            // XF.Material.Droid.Material.Init(this, savedInstanceState);
             Xamarin.FormsGoogleMaps.Init(this, savedInstanceState); // initialize for Xamarin.Forms.GoogleMaps
             LoadApplication(new App());
         }

@@ -54,12 +54,17 @@ namespace CatFeeder.Droid.DependencyServices
                         MessagingCenter.Send<string>("access token bilgisi alınamadı", "NoInternet");
                     }
                     var accessToken = GoogleAuthUtil.GetToken(Android.App.Application.Context, result.SignInAccount.Email, $"oauth2:{Scopes.Email} {Scopes.Profile}");
-                    MessagingCenter.Send<string>(accessToken, "googleAndroidAccessToken");
                     googleUser.AccessToken = accessToken;
+                    MessagingCenter.Send<string>(accessToken, "googleAndroidAccessToken");
+                  
                 });
                 GoogleSignInAccount accountt = result.SignInAccount;
                 googleUser.Email = accountt.Email;
-                googleUser.Name = accountt.DisplayName;
+                googleUser.Name = accountt.GivenName;
+                googleUser.Surname = accountt.FamilyName;
+                googleUser.AccessToken = accountt.IdToken;
+                //googleUser.Token = accountt.IdToken;
+
                 googleUser.Picture = new Uri((accountt.PhotoUrl != null ? $"{accountt.PhotoUrl}" : $"https://autisticdating.net/imgs/profile-placeholder.jpg"));
                 _onLoginComplete?.Invoke(googleUser, string.Empty);
             }

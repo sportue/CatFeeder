@@ -33,17 +33,18 @@ namespace CatFeeder.Services
         #endregion
 
         #region GoogleMap
-        public const string GoogleMapsApiKey = "AIzaSyBCgSgspHLMDGIWwTJ84elKbLGqX0wujSg";
+        public const string GoogleMapsApiKey = "AIzaSyDxnQqG4FP0hF2X5RilaGRXGyfILqnmDKg";
                                               
 
 
         #endregion
 
 
-        public static string SignIn = "http://sportue.xyz/api/login/signIn";
-        public static string SignUp = "http://sportue.xyz/api/login/signUp";
-        public static string ForgotPassword = "http://sportue.xyz/api/Login/ForgetPassword";
-        public static string SignInWithFacebook = "http://sportue.xyz/api/Login/Facebook";
+        public static string SignIn = "http://sportue.xyz/sportue/api/login/signIn";
+        public static string SignUp = "http://sportue.xyz/sportue/api/login/signUp";
+        public static string ForgotPassword = "http://sportue.xyz/sportue/api/Login/ForgetPassword";
+        public static string SignInWithFacebook = "http://sportue.xyz/sportue/api/Login/Facebook";
+        public static string TargetLocations = "http://sportue.xyz/sportue/api/Map/TargetLocations";
 
     }
 }

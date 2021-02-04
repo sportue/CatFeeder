@@ -31,15 +31,18 @@ namespace CatFeeder.Views
 
             if (content != null)
             {
-                Pin BowlPin = new Pin()
+                foreach (var item in content)
                 {
-                    Label = "Bowl",
-                    Type = PinType.Place,
-                 
-                    Position = new Position(content.Latitude, content.Longitude)
-                };
-         
-                map.Pins.Add(BowlPin);
+                    Pin BowlPin = new Pin()
+                    {
+                        Label = "Bowl",
+                        Type = PinType.Place,
+
+                        Position = new Position(item.Latitude, item.Longitude)
+                    };
+
+                    map.Pins.Add(BowlPin);
+                }
                
                  map.PinClicked += (sender2, args) => {
                      selectedPinName = args.Pin.Label;
@@ -71,8 +74,8 @@ namespace CatFeeder.Views
 
                 map.Pins.Add(CurrentLocationPin);
 
-                var target = new Position(Convert.ToDouble(content.Latitude), Convert.ToDouble(content.Longitude));
-                var diameter = CalculateDistance(target, CurrentLocationPin.Position);
+               // var target = new Position(Convert.ToDouble(content.Latitude), Convert.ToDouble(content.Longitude));
+               // var diameter = CalculateDistance(target, CurrentLocationPin.Position);
 
                 map.MoveToRegion(MapSpan.FromCenterAndRadius(CurrentLocationPin.Position, Distance.FromMeters(1000)));
             }

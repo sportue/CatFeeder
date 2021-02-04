@@ -9,10 +9,13 @@ namespace CatFeeder
 
         private static UserRestService userService;
         public static UserRestService UserService { get => userService; set => userService = value; }
+        private static MapRestService mapService;
+        public static MapRestService MapService { get => mapService; set => mapService = value; }
         public App()
         {
             InitializeComponent();
             UserService = new UserRestService();
+            MapService = new MapRestService();
             MainPage = new NavigationPage(new SplashScreen());
            
         }
